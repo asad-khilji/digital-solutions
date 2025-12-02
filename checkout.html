@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Asad Khilji Services</title>
+
+<style>
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f1f2f6;
+    padding: 20px;
+}
+form {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+button {
+    width: 100%;
+    padding: 15px;
+    background: #27ae60;
+    border: none;
+    color: white;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+button:hover {
+    background: #2ecc71;
+}
+</style>
+</head>
+
+<body>
+
+<h1 style="text-align:center;">Checkout</h1>
+
+<div id="cartSummary"></div>
+
+<form action="https://formsubmit.co/khiljiasad2@gmail.com" method="post">
+
+    <input type="hidden" name="_subject" value="New Order - Digital Solutions">
+    <input type="hidden" name="_next" value="thankyou.html">
+    <input type="hidden" name="_captcha" value="true">
+
+    <label>Name</label>
+    <input type="text" name="name" required><br><br>
+
+    <label>Email</label>
+    <input type="email" name="email" required><br><br>
+
+    <label>Notes</label>
+    <textarea name="notes" rows="4"></textarea><br><br>
+
+    <label>Order Summary</label>
+    <textarea id="orderField" name="order" readonly style="width:100%; height:150px;"></textarea>
+
+    <br><br>
+    <button type="submit">Place Order</button>
+</form>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const cart = JSON.parse(decodeURIComponent(params.get("cart")));
+
+let html = "<h2>Your Order</h2><ul>";
+let text = "";
+let total = 0;
+
+cart.forEach(item => {
+    html += `<li>${item.name} - $${item.price}</li>`;
+    text += `${item.name} - $${item.price}\n`;
+    total += item.price;
+});
+
+html += `</ul><h3>Total: $${total}</h3>`;
+document.getElementById("cartSummary").innerHTML = html;
+
+document.getElementById("orderField").value =
+    text + "\nTOTAL = $" + total;
+</script>
+
+</body>
+</html>
