@@ -97,7 +97,7 @@ header h1 {
     background: #444;
 }
 
-/* CART MODAL */
+/* CART POPUP */
 #cartModal {
     position: fixed;
     top: 0; left: 0;
@@ -140,16 +140,18 @@ header h1 {
 
 <section id="hero">
     <h2>Professional Digital Solutions</h2>
-    <p>Website Design • Catalog Design • Data Entry • Conversions • PDF Processing</p>
+    <p>Website Design • Catalog Design • Data Entry • File Conversions • PDF Processing</p>
 </section>
 
 <section id="services"></section>
 
-<!-- CART MODAL -->
+<!-- CART POPUP -->
 <div id="cartModal">
     <div id="cartBox">
         <h2>Your Cart</h2>
         <ul id="cartList"></ul>
+        <h3 id="cartTotal"></h3>
+
         <button class="checkout-btn" onclick="goToCheckout()">Proceed to Checkout</button>
         <button class="add-btn" style="background:#b2bec3; margin-top:12px;" onclick="closeCart()">Close</button>
     </div>
@@ -161,12 +163,14 @@ const servicesData = [
     { id: 1, name: "Website Design", price: 150 },
     { id: 2, name: "Catalog Design", price: 60 },
     { id: 3, name: "Data Entry", price: 30 },
+
+    // original conversions
     { id: 4, name: "Word ⇄ PDF Conversion", price: 5 },
     { id: 5, name: "Excel ⇄ PDF Conversion", price: 5 },
     { id: 6, name: "PowerPoint ⇄ PDF Conversion", price: 5 }
 ];
 
-// Rendering Services
+// RENDER SERVICES
 const servicesContainer = document.getElementById("services");
 
 servicesData.forEach(service => {
@@ -180,29 +184,36 @@ servicesData.forEach(service => {
     servicesContainer.appendChild(card);
 });
 
-// Cart Logic
+// CART SYSTEM
 let cart = [];
 
 function addToCart(id) {
     const item = servicesData.find(s => s.id === id);
     cart.push(item);
-    updateCart();
-    alert(item.name + " added to cart!");
+    updateCartCount();
+    openCart(); // auto-open popup
 }
 
-function updateCart() {
+function updateCartCount() {
     document.getElementById("cartCount").textContent = cart.length;
 }
 
 function openCart() {
     document.getElementById("cartModal").style.display = "flex";
+
     const list = document.getElementById("cartList");
     list.innerHTML = "";
+
+    let total = 0;
+
     cart.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = item.name + " - $" + item.price;
+        li.textContent = `${item.name} - $${item.price}`;
         list.appendChild(li);
+        total += item.price;
     });
+
+    document.getElementById("cartTotal").innerText = "Total: $" + total;
 }
 
 function closeCart() {
